@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Professional Service & Maintenance Request Form and Live A4 Printable Ticket Management System">
+    <title>SERVICE & MAINTENANCE REQUEST FORM</title>
+    <!-- Modern Google Font for Web UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- WEB APPLICATION INTERFACE -->
+    <div class="web-ui-container">
+        <!-- Top Navigation / Application Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="brand-logo-container">
+                    <img src="assets/logo.svg" alt="Company Logo" class="app-logo">
+                </div>
+                <div class="header-title-wrap">
+                    <h1 class="main-title">SERVICE & MAINTENANCE REQUEST FORM</h1>
+                    <p class="subtitle">Service Ticket & Maintenance Management</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button type="button" id="btn-export-json" class="btn btn-outline"
+                    title="Export form data as a JSON file">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>Export JSON Backup</span>
+                </button>
+                <input type="file" id="input-import-json" accept=".json" style="display: none;">
+                <button type="button" id="btn-import-json" class="btn btn-outline"
+                    title="Import form data from a JSON file">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span>Import JSON</span>
+                </button>
+                <button type="button" id="btn-save-draft" class="btn btn-secondary" title="Save draft to local storage">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span>Save Draft</span>
+                </button>
+                <button type="button" id="btn-clear-form" class="btn btn-danger" title="Clear all fields">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    <span>Clear Form</span>
+                </button>
+                <button type="button" id="btn-print-top" class="btn btn-primary" title="Print document or save as PDF">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    <span>Print Form</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace Layout -->
+        <main class="app-workspace">
+            <!-- Left Column: Form Editor -->
+            <section class="form-panel-container">
+                <div class="panel-header-sticky">
+                    <div class="panel-tag">
+                        <span class="pulse-dot"></span>
+                        <h2>Data Entry Form</h2>
+                    </div>
+                    <span class="auto-sync-label">⚡ Real-time Live Sync</span>
+                </div>
+
+                <form id="service-request-form" class="modern-form" autocomplete="off">
+
+                    <!-- SECTION 1: SERVICE / TICKET INFORMATION -->
+                    <div class="form-card" id="card-section-1">
+                        <div class="card-header">
+                            <div class="card-step-num">01</div>
+                            <div class="card-header-text">
+                                <h3>Service / Ticket Information</h3>
+                                <p>Core ticket identification, reporting source, priority, and current status</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="input-ticket-no" class="form-label required">Ticket No.</label>
+                                    <input type="text" id="input-ticket-no" name="ticket_no" class="form-input"
+                                        placeholder="e.g. SR-2026-0842" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-report-datetime" class="form-label required">Report Date &
+                                        Time</label>
+                                    <input type="datetime-local" id="input-report-datetime" name="report_datetime"
+                                        class="form-input" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Report Source</label>
+                                <div class="checkbox-group inline-wrap">
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="report_source" value="Customer Complaint"
+                                            id="src-customer-complaint">
+                                        <span class="checkmark"></span>
+                                        <span>Customer Complaint</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="report_source" value="Monitoring Portal"
+                                            id="src-monitoring-portal">
+                                        <span class="checkmark"></span>
+                                        <span>Monitoring Portal</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="report_source" value="Annual Maintenance"
+                                            id="src-annual-maintenance">
+                                        <span class="checkmark"></span>
+                                        <span>Annual Maintenance</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-assigned-to" class="form-label">Assigned To</label>
+                                <input type="text" id="input-assigned-to" name="assigned_to" class="form-input"
+                                    placeholder="Technician / Engineer name or team">
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label">Priority</label>
+                                    <div class="checkbox-group grid-2-col">
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="priority" value="Emergency" id="pri-emergency">
+                                            <span class="checkmark"></span>
+                                            <span class="badge-tag emergency">Emergency</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="priority" value="High" id="pri-high">
+                                            <span class="checkmark"></span>
+                                            <span class="badge-tag high">High</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="priority" value="Normal" id="pri-normal">
+                                            <span class="checkmark"></span>
+                                            <span class="badge-tag normal">Normal</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="priority" value="Low" id="pri-low">
+                                            <span class="checkmark"></span>
+                                            <span class="badge-tag low">Low</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Report Type</label>
+                                    <div class="checkbox-group grid-2-col">
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="report_type" value="Corrective"
+                                                id="rep-corrective">
+                                            <span class="checkmark"></span>
+                                            <span>Corrective</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="report_type" value="Preventive"
+                                                id="rep-preventive">
+                                            <span class="checkmark"></span>
+                                            <span>Preventive</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="report_type" value="Inspection"
+                                                id="rep-inspection">
+                                            <span class="checkmark"></span>
+                                            <span>Inspection</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="report_type" value="Warranty"
+                                                id="rep-warranty">
+                                            <span class="checkmark"></span>
+                                            <span>Warranty</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Ticket Status</label>
+                                <div class="checkbox-group grid-3-col">
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="ticket_status" value="Open" id="st-open">
+                                        <span class="checkmark"></span>
+                                        <span>Open</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="ticket_status" value="Assigned" id="st-assigned">
+                                        <span class="checkmark"></span>
+                                        <span>Assigned</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="ticket_status" value="Site Visit"
+                                            id="st-site-visit">
+                                        <span class="checkmark"></span>
+                                        <span>Site Visit</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="ticket_status" value="In Progress"
+                                            id="st-in-progress">
+                                        <span class="checkmark"></span>
+                                        <span>In Progress</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="ticket_status" value="Customer Feedback"
+                                            id="st-cust-feedback">
+                                        <span class="checkmark"></span>
+                                        <span>Customer Feedback</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="ticket_status" value="Awaiting Spare Parts"
+                                            id="st-awaiting-parts">
+                                        <span class="checkmark"></span>
+                                        <span>Awaiting Spare Parts</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="ticket_status" value="Awaiting OEM"
+                                            id="st-awaiting-oem">
+                                        <span class="checkmark"></span>
+                                        <span>Awaiting OEM</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="ticket_status" value="Resolved" id="st-resolved">
+                                        <span class="checkmark"></span>
+                                        <span>Resolved</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="ticket_status" value="Closed" id="st-closed">
+                                        <span class="checkmark"></span>
+                                        <span>Closed</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: CUSTOMER DETAILS -->
+                    <div class="form-card" id="card-section-2">
+                        <div class="card-header">
+                            <div class="card-step-num">02</div>
+                            <div class="card-header-text">
+                                <h3>Customer Details</h3>
+                                <p>Site ownership, contact details, coordinates, and solar grid connection scheme</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="input-crn" class="form-label">CRN (Customer Ref No.)</label>
+                                    <input type="text" id="input-crn" name="crn" class="form-input"
+                                        placeholder="e.g. CRN-98421">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-customer-name" class="form-label required">Customer Name</label>
+                                    <input type="text" id="input-customer-name" name="customer_name" class="form-input"
+                                        placeholder="Full name of client or organization" required>
+                                </div>
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="input-utility-acct" class="form-label">EDL / LECO Account No.</label>
+                                    <input type="text" id="input-utility-acct" name="utility_acct" class="form-input"
+                                        placeholder="e.g. 5402918234">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-contact-person" class="form-label required">Contact Person Name &
+                                        Phone</label>
+                                    <input type="text" id="input-contact-person" name="contact_person"
+                                        class="form-input" placeholder="e.g. John Silva / +94 77 123 4567" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-site-address" class="form-label required">Site Address</label>
+                                <textarea id="input-site-address" name="site_address"
+                                    class="form-textarea short-textarea" placeholder="Physical installation address"
+                                    required></textarea>
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="nested-box">
+                                    <label class="nested-box-title">GPS Coordinates</label>
+                                    <div class="form-grid-2 inner-grid">
+                                        <div class="form-group">
+                                            <label for="input-gps-lat" class="sub-label">Lat:</label>
+                                            <input type="text" id="input-gps-lat" name="gps_lat" class="form-input"
+                                                placeholder="6.9271° N">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="input-gps-long" class="sub-label">Long:</label>
+                                            <input type="text" id="input-gps-long" name="gps_long" class="form-input"
+                                                placeholder="79.8612° E">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nested-box">
+                                    <label class="nested-box-title">System Capacity</label>
+                                    <div class="form-grid-2 inner-grid">
+                                        <div class="form-group">
+                                            <label for="input-capacity-dc" class="sub-label">DC (kWp / MWp):</label>
+                                            <input type="text" id="input-capacity-dc" name="capacity_dc"
+                                                class="form-input" placeholder="e.g. 15.0 kWp">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="input-capacity-ac" class="sub-label">AC (kW / MW):</label>
+                                            <input type="text" id="input-capacity-ac" name="capacity_ac"
+                                                class="form-input" placeholder="e.g. 12.0 kW">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-commissioning-date" class="form-label">Commissioning Date</label>
+                                <input type="date" id="input-commissioning-date" name="commissioning_date"
+                                    class="form-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Grid Scheme</label>
+                                <div class="checkbox-group inline-wrap">
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="grid_scheme" value="Net Metering"
+                                            id="grid-net-metering">
+                                        <span class="checkmark"></span>
+                                        <span>Net Metering</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="grid_scheme" value="Net Accounting"
+                                            id="grid-net-accounting">
+                                        <span class="checkmark"></span>
+                                        <span>Net Accounting</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="grid_scheme" value="Net Plus" id="grid-net-plus">
+                                        <span class="checkmark"></span>
+                                        <span>Net Plus</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="grid_scheme" value="Net Plus Plus"
+                                            id="grid-net-plus-plus">
+                                        <span class="checkmark"></span>
+                                        <span>Net Plus Plus</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="grid_scheme" value="Off-Grid" id="grid-off-grid">
+                                        <span class="checkmark"></span>
+                                        <span>Off-Grid</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: EQUIPMENT INFORMATION -->
+                    <div class="form-card" id="card-section-3">
+                        <div class="card-header">
+                            <div class="card-step-num">03</div>
+                            <div class="card-header-text">
+                                <h3>Equipment Information</h3>
+                                <p>Hardware serial numbers, models, communication & warranty statuses</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="input-module-brand" class="form-label">PV Module Brand & Model</label>
+                                    <input type="text" id="input-module-brand" name="module_brand" class="form-input"
+                                        placeholder="e.g. Jinko Tiger Pro 545W">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-module-serials" class="form-label">Module Serial No(s)</label>
+                                    <input type="text" id="input-module-serials" name="module_serials"
+                                        class="form-input" placeholder="e.g. JK20251104... (or batch ID)">
+                                </div>
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="input-inverter-brand" class="form-label">Inverter Brand & Model</label>
+                                    <input type="text" id="input-inverter-brand" name="inverter_brand"
+                                        class="form-input" placeholder="e.g. Huawei SUN2000-12KTL">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-inverter-serial" class="form-label">Inverter Serial No.</label>
+                                    <input type="text" id="input-inverter-serial" name="inverter_serial"
+                                        class="form-input" placeholder="e.g. HW8920194812">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Inverter Type</label>
+                                <div class="checkbox-group inline-wrap">
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="inverter_type" value="On-Grid" id="inv-ongrid">
+                                        <span class="checkmark"></span>
+                                        <span>On-Grid</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="inverter_type" value="Hybrid" id="inv-hybrid">
+                                        <span class="checkmark"></span>
+                                        <span>Hybrid</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="inverter_type" value="Off-Grid" id="inv-offgrid">
+                                        <span class="checkmark"></span>
+                                        <span>Off-Grid</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="input-battery-brand" class="form-label">Battery Brand & Model</label>
+                                    <input type="text" id="input-battery-brand" name="battery_brand" class="form-input"
+                                        placeholder="e.g. BYD B-Box Premium HVS">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-battery-serial" class="form-label">Battery Serial No.</label>
+                                    <input type="text" id="input-battery-serial" name="battery_serial"
+                                        class="form-input" placeholder="e.g. BYD-9031849">
+                                </div>
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="input-logger-serial" class="form-label">Logger Serial No.</label>
+                                    <input type="text" id="input-logger-serial" name="logger_serial" class="form-input"
+                                        placeholder="e.g. SDongle-4910294">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Communication Status</label>
+                                    <div class="checkbox-group inline-wrap">
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="comm_status" value="Online" id="comm-online">
+                                            <span class="checkmark"></span>
+                                            <span>Online</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="comm_status" value="Offline" id="comm-offline">
+                                            <span class="checkmark"></span>
+                                            <span>Offline</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="comm_status" value="Intermittent"
+                                                id="comm-intermittent">
+                                            <span class="checkmark"></span>
+                                            <span>Intermittent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="nested-box">
+                                <label class="nested-box-title">Warranty Coverage</label>
+                                <div class="form-grid-2 inner-grid">
+                                    <div class="form-group">
+                                        <label class="sub-label">Warranty Status:</label>
+                                        <div class="checkbox-group inline-wrap">
+                                            <label class="custom-checkbox-ui">
+                                                <input type="checkbox" name="warranty_status" value="Under Warranty"
+                                                    id="war-under">
+                                                <span class="checkmark"></span>
+                                                <span>Under Warranty</span>
+                                            </label>
+                                            <label class="custom-checkbox-ui">
+                                                <input type="checkbox" name="warranty_status" value="Expired"
+                                                    id="war-expired">
+                                                <span class="checkmark"></span>
+                                                <span>Expired</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remaining-warranty" class="sub-label">Remaining Warranty
+                                            Period:</label>
+                                        <input type="text" id="input-remaining-warranty" name="remaining_warranty"
+                                            class="form-input" placeholder="e.g. 2 Years, 4 Months">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: FAULT DETAILS -->
+                    <div class="form-card" id="card-section-4">
+                        <div class="card-header">
+                            <div class="card-step-num">04</div>
+                            <div class="card-header-text">
+                                <h3>Fault Details</h3>
+                                <p>Symptoms, error codes, weather, outage duration, generation loss, and affected
+                                    components</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="input-fault-datetime" class="form-label">Fault Reported Date &
+                                        Time</label>
+                                    <input type="datetime-local" id="input-fault-datetime" name="fault_datetime"
+                                        class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-error-code" class="form-label">Inverter Error Code</label>
+                                    <input type="text" id="input-error-code" name="error_code" class="form-input"
+                                        placeholder="e.g. 2064 (Grid Overvoltage)">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-fault-symptom" class="form-label">Fault Symptom</label>
+                                <textarea id="input-fault-symptom" name="fault_symptom" class="form-textarea" rows="3"
+                                    placeholder="Detailed description of the issue observed by customer or telemetry..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Weather at Time of Fault</label>
+                                <div class="checkbox-group inline-wrap">
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="weather" value="Sunny" id="wth-sunny">
+                                        <span class="checkmark"></span>
+                                        <span>Sunny</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="weather" value="Cloudy" id="wth-cloudy">
+                                        <span class="checkmark"></span>
+                                        <span>Cloudy</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="weather" value="Rainy" id="wth-rainy">
+                                        <span class="checkmark"></span>
+                                        <span>Rainy</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="weather" value="Windy" id="wth-windy">
+                                        <span class="checkmark"></span>
+                                        <span>Windy</span>
+                                    </label>
+                                    <div class="inline-other-wrap">
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="weather" value="Other" id="wth-other-check">
+                                            <span class="checkmark"></span>
+                                            <span>Other:</span>
+                                        </label>
+                                        <input type="text" id="input-weather-other" name="weather_other"
+                                            class="form-input inline-other-input" placeholder="Specify weather">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="nested-box">
+                                    <label class="nested-box-title">Duration of Outage</label>
+                                    <div class="form-grid-2 inner-grid">
+                                        <div class="form-group">
+                                            <label for="input-outage-days" class="sub-label">Days:</label>
+                                            <input type="number" id="input-outage-days" name="outage_days"
+                                                class="form-input" min="0" placeholder="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="input-outage-hours" class="sub-label">Hours:</label>
+                                            <input type="number" id="input-outage-hours" name="outage_hours"
+                                                class="form-input" min="0" max="23" placeholder="0">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nested-box">
+                                    <label class="nested-box-title">Estimated Generation Loss</label>
+                                    <div class="form-group">
+                                        <label for="input-generation-loss" class="sub-label">Generation Loss (kWh /
+                                            MWh):</label>
+                                        <input type="text" id="input-generation-loss" name="generation_loss"
+                                            class="form-input" placeholder="e.g. 185 kWh">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Affected Component</label>
+                                <div class="checkbox-group grid-4-col">
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="affected_component" value="PV Array" id="comp-pv">
+                                        <span class="checkmark"></span>
+                                        <span>PV Array</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="affected_component" value="Inverter"
+                                            id="comp-inverter">
+                                        <span class="checkmark"></span>
+                                        <span>Inverter</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="affected_component" value="Battery"
+                                            id="comp-battery">
+                                        <span class="checkmark"></span>
+                                        <span>Battery</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="affected_component" value="Meter" id="comp-meter">
+                                        <span class="checkmark"></span>
+                                        <span>Meter</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="affected_component" value="Wiring"
+                                            id="comp-wiring">
+                                        <span class="checkmark"></span>
+                                        <span>Wiring</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="affected_component" value="Connectors"
+                                            id="comp-connectors">
+                                        <span class="checkmark"></span>
+                                        <span>Connectors</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="affected_component" value="Mounting Structure"
+                                            id="comp-mounting">
+                                        <span class="checkmark"></span>
+                                        <span>Mounting Structure</span>
+                                    </label>
+                                    <div class="inline-other-wrap full-span">
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="affected_component" value="Other"
+                                                id="comp-other-check">
+                                            <span class="checkmark"></span>
+                                            <span>Other:</span>
+                                        </label>
+                                        <input type="text" id="input-affected-other" name="affected_other"
+                                            class="form-input inline-other-input" placeholder="Specify other component">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-target-resolution-date" class="form-label">Target Resolution
+                                    Date</label>
+                                <input type="date" id="input-target-resolution-date" name="target_resolution_date"
+                                    class="form-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PAGE BREAK INDICATOR IN WEB FORM -->
+                    <div class="page-divider-badge">
+                        <div class="divider-line"></div>
+                        <span class="divider-pill">📄 PAGE 2 OF DOCUMENT</span>
+                        <div class="divider-line"></div>
+                    </div>
+
+                    <!-- SECTION 5: CORRECTIVE ACTIONS -->
+                    <div class="form-card" id="card-section-5">
+                        <div class="card-header">
+                            <div class="card-step-num">05</div>
+                            <div class="card-header-text">
+                                <h3>Corrective Actions</h3>
+                                <p>Fix categorization, repairs conducted, replacement parts, and restoration time</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">Fix Type</label>
+                                <div class="checkbox-group inline-wrap">
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="fix_type" value="Temporary" id="fix-temporary">
+                                        <span class="checkmark"></span>
+                                        <span>Temporary</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="fix_type" value="Permanent" id="fix-permanent">
+                                        <span class="checkmark"></span>
+                                        <span>Permanent</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-work-performed" class="form-label">Work Performed</label>
+                                <textarea id="input-work-performed" name="work_performed" class="form-textarea" rows="4"
+                                    placeholder="Describe the diagnostic procedures, technical interventions, recalibrations, and tests performed..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-parts-used" class="form-label">Parts Used</label>
+                                <textarea id="input-parts-used" name="parts_used" class="form-textarea" rows="3"
+                                    placeholder="List item names, part numbers, quantities replaced or fitted..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Monitoring</label>
+                                <div class="checkbox-group inline-wrap">
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="monitoring" value="Unchanged" id="mon-unchanged">
+                                        <span class="checkmark"></span>
+                                        <span>Unchanged</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="monitoring" value="Restored" id="mon-restored">
+                                        <span class="checkmark"></span>
+                                        <span>Restored</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="monitoring" value="No Network" id="mon-nonetwork">
+                                        <span class="checkmark"></span>
+                                        <span>No Network</span>
+                                    </label>
+                                    <label class="custom-checkbox-ui">
+                                        <input type="checkbox" name="monitoring" value="Unavailable"
+                                            id="mon-unavailable">
+                                        <span class="checkmark"></span>
+                                        <span>Unavailable</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="nested-box">
+                                    <label class="nested-box-title">Warranty Claim</label>
+                                    <div class="checkbox-group inline-wrap mb-2">
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="warranty_claim" value="Yes" id="wc-yes">
+                                            <span class="checkmark"></span>
+                                            <span>Yes</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="warranty_claim" value="No" id="wc-no">
+                                            <span class="checkmark"></span>
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-warranty-partno" class="sub-label">Part No:</label>
+                                        <input type="text" id="input-warranty-partno" name="warranty_partno"
+                                            class="form-input" placeholder="e.g. PN-7729-OEM">
+                                    </div>
+                                </div>
+
+                                <div class="nested-box">
+                                    <label class="nested-box-title">Return Visit Required</label>
+                                    <div class="checkbox-group inline-wrap mb-2">
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="return_visit" value="Yes" id="rv-yes">
+                                            <span class="checkmark"></span>
+                                            <span>Yes</span>
+                                        </label>
+                                        <label class="custom-checkbox-ui">
+                                            <input type="checkbox" name="return_visit" value="No" id="rv-no">
+                                            <span class="checkmark"></span>
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-return-visit-date" class="sub-label">Date:</label>
+                                        <input type="date" id="input-return-visit-date" name="return_visit_date"
+                                            class="form-input">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-restored-datetime" class="form-label">Restored Date & Time</label>
+                                <input type="datetime-local" id="input-restored-datetime" name="restored_datetime"
+                                    class="form-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 6: PHOTO EVIDENCE -->
+                    <div class="form-card" id="card-section-6">
+                        <div class="card-header">
+                            <div class="card-step-num">06</div>
+                            <div class="card-header-text">
+                                <h3>Photo Evidence Checklist</h3>
+                                <p>Standard photographic documentation protocol required for sign-off</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="photo-evidence-checklist">
+                                <label class="photo-check-row">
+                                    <input type="checkbox" name="photo_fault_code_pre" id="chk-photo-fault-pre">
+                                    <span class="checkmark"></span>
+                                    <div class="photo-info">
+                                        <strong class="photo-title">Fault Code / Alarm Screen</strong>
+                                        <span class="photo-desc">Inverter display or monitoring system screenshot</span>
+                                    </div>
+                                </label>
+
+                                <label class="photo-check-row">
+                                    <input type="checkbox" name="photo_nameplate" id="chk-photo-nameplate">
+                                    <span class="checkmark"></span>
+                                    <div class="photo-info">
+                                        <strong class="photo-title">Inverter Nameplate</strong>
+                                        <span class="photo-desc">Clear view of model and serial number</span>
+                                    </div>
+                                </label>
+
+                                <label class="photo-check-row">
+                                    <input type="checkbox" name="photo_environment" id="chk-photo-environment">
+                                    <span class="checkmark"></span>
+                                    <div class="photo-info">
+                                        <strong class="photo-title">Installation Environment</strong>
+                                        <span class="photo-desc">Showing inverter location and surroundings</span>
+                                    </div>
+                                </label>
+
+                                <label class="photo-check-row">
+                                    <input type="checkbox" name="photo_switchgear" id="chk-photo-switchgear">
+                                    <span class="checkmark"></span>
+                                    <div class="photo-info">
+                                        <strong class="photo-title">DC / AC Switchgear</strong>
+                                        <span class="photo-desc">Showing switch positions and wiring</span>
+                                    </div>
+                                </label>
+
+                                <label class="photo-check-row">
+                                    <input type="checkbox" name="photo_faulty_comp" id="chk-photo-faulty-comp">
+                                    <span class="checkmark"></span>
+                                    <div class="photo-info">
+                                        <strong class="photo-title">Faulty Component</strong>
+                                        <span class="photo-desc">Defect or damage detail</span>
+                                    </div>
+                                </label>
+
+                                <label class="photo-check-row">
+                                    <input type="checkbox" name="photo_post_repair" id="chk-photo-post-repair">
+                                    <span class="checkmark"></span>
+                                    <div class="photo-info">
+                                        <strong class="photo-title">Post-Repair</strong>
+                                        <span class="photo-desc">Same angle as faulty state photos to confirm
+                                            completion</span>
+                                    </div>
+                                </label>
+
+                                <label class="photo-check-row">
+                                    <input type="checkbox" name="photo_fault_code_post" id="chk-photo-fault-post">
+                                    <span class="checkmark"></span>
+                                    <div class="photo-info">
+                                        <strong class="photo-title">Fault Code / Alarm Screen</strong>
+                                        <span class="photo-desc">Inverter display or monitoring system screenshot post
+                                            correction</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 7: REMARKS -->
+                    <div class="form-card" id="card-section-7">
+                        <div class="card-header">
+                            <div class="card-step-num">07</div>
+                            <div class="card-header-text">
+                                <h3>Remarks</h3>
+                                <p>Specific observations from the field technician, service engineer, and client</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="input-remarks-tech" class="form-label">Field Technician / Officer
+                                    Remarks</label>
+                                <textarea id="input-remarks-tech" name="remarks_tech" class="form-textarea" rows="2"
+                                    placeholder="Field technician's notes, safety observations, or recommendations..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="input-remarks-eng" class="form-label">Service Engineer Remarks</label>
+                                <textarea id="input-remarks-eng" name="remarks_eng" class="form-textarea" rows="2"
+                                    placeholder="Engineering review, root cause analysis, or follow-up instructions..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="input-remarks-cust" class="form-label">Customer Remarks</label>
+                                <textarea id="input-remarks-cust" name="remarks_cust" class="form-textarea" rows="2"
+                                    placeholder="Customer feedback or confirmation notes..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 8: ACKNOWLEDGEMENT -->
+                    <div class="form-card" id="card-section-8">
+                        <div class="card-header">
+                            <div class="card-step-num">08</div>
+                            <div class="card-header-text">
+                                <h3>Acknowledgement</h3>
+                                <p>Sign-off roles, names, and verification dates</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="ack-grid-row">
+                                <h4 class="ack-role-title">Field Technician / Officer</h4>
+                                <div class="form-grid-2">
+                                    <div class="form-group">
+                                        <label for="input-ack-tech-name" class="sub-label">Name:</label>
+                                        <input type="text" id="input-ack-tech-name" name="ack_tech_name"
+                                            class="form-input" placeholder="Technician Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-ack-tech-date" class="sub-label">Date:</label>
+                                        <input type="date" id="input-ack-tech-date" name="ack_tech_date"
+                                            class="form-input">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ack-grid-row">
+                                <h4 class="ack-role-title">Service Engineer</h4>
+                                <div class="form-grid-2">
+                                    <div class="form-group">
+                                        <label for="input-ack-eng-name" class="sub-label">Name:</label>
+                                        <input type="text" id="input-ack-eng-name" name="ack_eng_name"
+                                            class="form-input" placeholder="Service Engineer Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-ack-eng-date" class="sub-label">Date:</label>
+                                        <input type="date" id="input-ack-eng-date" name="ack_eng_date"
+                                            class="form-input">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ack-grid-row">
+                                <h4 class="ack-role-title">Customer</h4>
+                                <div class="form-grid-2">
+                                    <div class="form-group">
+                                        <label for="input-ack-cust-name" class="sub-label">Name:</label>
+                                        <input type="text" id="input-ack-cust-name" name="ack_cust_name"
+                                            class="form-input" placeholder="Customer Signatory Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-ack-cust-date" class="sub-label">Date:</label>
+                                        <input type="date" id="input-ack-cust-date" name="ack_cust_date"
+                                            class="form-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Bar -->
+                    <div class="form-bottom-bar">
+                        <button type="button" id="btn-save-draft-bottom" class="btn btn-secondary">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                <polyline points="7 3 7 8 15 8"></polyline>
+                            </svg>
+                            <span>Save Draft</span>
+                        </button>
+                        <button type="button" id="btn-print-bottom" class="btn btn-primary btn-large">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2">
+                                </path>
+                                <rect x="6" y="14" width="12" height="8"></rect>
+                            </svg>
+                            <span>Print Service Form (2 Pages)</span>
+                        </button>
+                    </div>
+
+                </form>
+            </section>
+
+            <!-- Right Column: Live A4 Print Preview -->
+            <section class="preview-panel-container">
+                <div class="preview-toolbar">
+                    <div class="preview-toolbar-left">
+                        <span class="preview-label-badge">
+                            <svg class="preview-eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <span>A4 Print Preview (2 Pages)</span>
+                        </span>
+                        <span class="page-count-badge">Page 1 & 2 of 2</span>
+                    </div>
+
+                    <div class="preview-toolbar-right">
+                        <div class="zoom-controls">
+                            <button type="button" id="btn-zoom-out" class="tool-btn" title="Zoom Out">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
+                            <span id="zoom-level-text" class="zoom-text">100%</span>
+                            <button type="button" id="btn-zoom-in" class="tool-btn" title="Zoom In">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
+                            <button type="button" id="btn-zoom-fit" class="tool-btn fit-btn"
+                                title="Fit to Preview Width">Fit Width</button>
+                            <button type="button" id="btn-zoom-reset" class="tool-btn" title="Reset Zoom">100%</button>
+                        </div>
+                        <button type="button" id="btn-print-preview" class="btn btn-primary btn-sm">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2">
+                                </path>
+                                <rect x="6" y="14" width="12" height="8"></rect>
+                            </svg>
+                            <span>Print</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scrollable Viewport Wrapper for Zoom Engine -->
+                <div class="preview-scroll-viewport" id="preview-viewport">
+                    <div class="preview-zoom-stage" id="preview-zoom-stage">
+
+                        <!-- ====================================================================== -->
+                        <!-- DYNAMIC EXECUTIVE PRINT DOCUMENT - PAGE 1 & PAGE 2 (A4 EXACT FIT)      -->
+                        <!-- ====================================================================== -->
+                        <div class="print-document" id="printable-document">
+
+                            <!-- ============================================== -->
+                            <!-- PAGE 1 OF 2                                    -->
+                            <!-- ============================================== -->
+                            <div class="print-page print-page-1" id="print-p1">
+
+                                <!-- PAGE 1 TITLE & HEADER -->
+                                <div class="print-doc-header">
+                                    <div class="print-header-top">
+                                        <div class="print-header-logo-wrap">
+                                            <img src="assets/logo.svg" alt="Company Logo" class="print-logo">
+                                        </div>
+                                        <div class="print-header-title-block">
+                                            <h1 class="print-main-title">SERVICE &amp; MAINTENANCE REQUEST FORM</h1>
+                                            <div class="print-header-sub">Solar PV System Service &amp; Technical Report
+                                            </div>
+                                        </div>
+                                        <div class="print-header-meta">
+                                            <div class="print-meta-row"><span class="print-meta-label">Ticket No:</span>
+                                                <span class="print-meta-val font-bold" id="pv-header-ticket"></span>
+                                            </div>
+                                            <div class="print-meta-row"><span class="print-meta-label">Date:</span>
+                                                <span class="print-meta-val" id="pv-header-date"></span></div>
+                                            <div class="print-meta-row"><span class="print-meta-label">Page:</span>
+                                                <span class="print-meta-val">1 of 2</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SECTION 1: SERVICE / TICKET INFORMATION -->
+                                <div class="print-section">
+                                    <div class="print-section-header">1. Service / Ticket Information</div>
+                                    <table class="print-table section-1-table">
+                                        <colgroup>
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td class="cell-label">Ticket No.</td>
+                                                <td class="cell-value font-bold" id="pv-ticket-no"></td>
+                                                <td class="cell-label">Report Date &amp; Time</td>
+                                                <td class="cell-value" id="pv-report-datetime"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Report Source</td>
+                                                <td class="cell-value" id="pv-report-source"></td>
+                                                <td class="cell-label">Assigned To</td>
+                                                <td class="cell-value font-medium" id="pv-assigned-to"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Priority</td>
+                                                <td class="cell-value" id="pv-priority"></td>
+                                                <td class="cell-label">Report Type</td>
+                                                <td class="cell-value" id="pv-report-type"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Ticket Status</td>
+                                                <td class="cell-value font-bold" colspan="3" id="pv-ticket-status"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- SECTION 2: CUSTOMER DETAILS -->
+                                <div class="print-section">
+                                    <div class="print-section-header">2. Customer Details</div>
+                                    <table class="print-table section-2-table">
+                                        <colgroup>
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td class="cell-label">CRN</td>
+                                                <td class="cell-value" id="pv-crn"></td>
+                                                <td class="cell-label">Customer Name</td>
+                                                <td class="cell-value font-bold" id="pv-customer-name"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">EDL / LECO Account No.</td>
+                                                <td class="cell-value" id="pv-utility-acct"></td>
+                                                <td class="cell-label">Contact Person &amp; Phone</td>
+                                                <td class="cell-value" id="pv-contact-person"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Site Address</td>
+                                                <td class="cell-value" colspan="3" id="pv-site-address"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">GPS Coordinates</td>
+                                                <td class="cell-value" colspan="3">
+                                                    <span class="p-sub-label">Lat:</span> <span id="pv-gps-lat"
+                                                        class="p-val-inline font-medium"></span>
+                                                    <span class="p-sub-label ml-6">Long:</span> <span id="pv-gps-long"
+                                                        class="p-val-inline font-medium"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">System Capacity</td>
+                                                <td class="cell-value" colspan="3">
+                                                    <span class="p-sub-label">DC:</span> <span id="pv-capacity-dc"
+                                                        class="p-val-inline font-bold"></span>
+                                                    <span class="p-sub-label ml-6">AC:</span> <span id="pv-capacity-ac"
+                                                        class="p-val-inline font-bold"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Commissioning Date</td>
+                                                <td class="cell-value" id="pv-commissioning-date"></td>
+                                                <td class="cell-label">Grid Scheme</td>
+                                                <td class="cell-value font-medium" id="pv-grid-scheme"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- SECTION 3: EQUIPMENT INFORMATION -->
+                                <div class="print-section">
+                                    <div class="print-section-header">3. Equipment Information</div>
+                                    <table class="print-table section-3-table">
+                                        <colgroup>
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td class="cell-label">PV Module Brand &amp; Model</td>
+                                                <td class="cell-value" id="pv-module-brand"></td>
+                                                <td class="cell-label">Module Serial No(s)</td>
+                                                <td class="cell-value" id="pv-module-serials"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Inverter Brand &amp; Model</td>
+                                                <td class="cell-value" id="pv-inverter-brand"></td>
+                                                <td class="cell-label">Inverter Serial No.</td>
+                                                <td class="cell-value" id="pv-inverter-serial"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Inverter Type</td>
+                                                <td class="cell-value font-medium" id="pv-inverter-type"></td>
+                                                <td class="cell-label">Logger Serial No.</td>
+                                                <td class="cell-value" id="pv-logger-serial"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Battery Brand &amp; Model</td>
+                                                <td class="cell-value" id="pv-battery-brand"></td>
+                                                <td class="cell-label">Battery Serial No.</td>
+                                                <td class="cell-value" id="pv-battery-serial"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Communication Status</td>
+                                                <td class="cell-value font-medium" id="pv-comm-status"></td>
+                                                <td class="cell-label">Warranty Status</td>
+                                                <td class="cell-value font-medium" id="pv-warranty-status"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Remaining Warranty</td>
+                                                <td class="cell-value" id="pv-remaining-warranty"></td>
+                                                <td class="cell-label"></td>
+                                                <td class="cell-value"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- SECTION 4: FAULT DETAILS -->
+                                <div class="print-section">
+                                    <div class="print-section-header">4. Fault Details</div>
+                                    <table class="print-table section-4-table">
+                                        <colgroup>
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td class="cell-label">Fault Reported Date &amp; Time</td>
+                                                <td class="cell-value" id="pv-fault-datetime"></td>
+                                                <td class="cell-label">Inverter Error Code</td>
+                                                <td class="cell-value font-bold color-danger-code" id="pv-error-code">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label align-top">Fault Symptom</td>
+                                                <td class="cell-value cell-textarea-p1" colspan="3"
+                                                    id="pv-fault-symptom"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Weather at Time of Fault</td>
+                                                <td class="cell-value" id="pv-weather"></td>
+                                                <td class="cell-label">Duration of Outage</td>
+                                                <td class="cell-value" id="pv-outage-duration"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Estimated Generation Loss</td>
+                                                <td class="cell-value font-bold" id="pv-generation-loss"></td>
+                                                <td class="cell-label">Target Resolution Date</td>
+                                                <td class="cell-value" id="pv-target-resolution-date"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Affected Component(s)</td>
+                                                <td class="cell-value font-medium" colspan="3"
+                                                    id="pv-affected-components"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div> <!-- END OF PAGE 1 -->
+
+                            <!-- ============================================== -->
+                            <!-- PAGE 2 OF 2                                    -->
+                            <!-- ============================================== -->
+                            <div class="print-page print-page-2" id="print-p2">
+
+                                <!-- SECTION 5: CORRECTIVE ACTIONS -->
+                                <div class="print-section">
+                                    <div class="print-section-header">5. Corrective Actions & Resolution</div>
+                                    <table class="print-table section-5-table">
+                                        <colgroup>
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                            <col style="width: 24%;">
+                                            <col style="width: 26%;">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td class="cell-label">Fix Type</td>
+                                                <td class="cell-value font-bold" id="pv-fix-type">-</td>
+                                                <td class="cell-label">Monitoring Status</td>
+                                                <td class="cell-value font-medium" id="pv-monitoring">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label align-top">Work Performed</td>
+                                                <td class="cell-value cell-textarea-p2" colspan="3"
+                                                    id="pv-work-performed">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label align-top">Parts Used</td>
+                                                <td class="cell-value cell-textarea-p2-parts" colspan="3"
+                                                    id="pv-parts-used">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Warranty Claim</td>
+                                                <td class="cell-value" id="pv-warranty-claim">-</td>
+                                                <td class="cell-label">Return Visit Required</td>
+                                                <td class="cell-value" id="pv-return-visit">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label">Restored Date & Time</td>
+                                                <td class="cell-value font-bold" colspan="3" id="pv-restored-datetime">-
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- SECTION 6: PHOTO EVIDENCE -->
+                                <div class="print-section">
+                                    <div class="print-section-header">6. Photo Evidence Checklist</div>
+                                    <table class="print-table section-6-table">
+                                        <colgroup>
+                                            <col style="width: 26%;">
+                                            <col style="width: 74%;">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td class="cell-label">Photos Captured</td>
+                                                <td class="cell-value cell-photo-evidence-list" id="pv-photo-evidence">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- SECTION 7: REMARKS -->
+                                <div class="print-section">
+                                    <div class="print-section-header">7. Remarks</div>
+                                    <table class="print-table section-7-table">
+                                        <colgroup>
+                                            <col style="width: 24%;">
+                                            <col style="width: 76%;">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td class="cell-label align-top font-bold">Field Technician / Officer
+                                                </td>
+                                                <td class="cell-value cell-remarks-box" id="pv-remarks-tech"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label align-top font-bold">Service Engineer</td>
+                                                <td class="cell-value cell-remarks-box" id="pv-remarks-eng"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-label align-top font-bold">Customer</td>
+                                                <td class="cell-value cell-remarks-box" id="pv-remarks-cust"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- SECTION 8: ACKNOWLEDGEMENT -->
+                                <div class="print-section">
+                                    <div class="print-section-header">8. Sign-off & Acknowledgement</div>
+                                    <table class="print-table section-8-table">
+                                        <colgroup>
+                                            <col style="width: 26%;">
+                                            <col style="width: 28%;">
+                                            <col style="width: 26%;">
+                                            <col style="width: 20%;">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>Role</th>
+                                                <th>Name</th>
+                                                <th>Signature</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="cell-role-label">Field Technician / Officer</td>
+                                                <td class="cell-value font-bold" id="pv-ack-tech-name">-</td>
+                                                <td class="cell-sign-space"></td>
+                                                <td class="cell-value" id="pv-ack-tech-date">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-role-label">Service Engineer</td>
+                                                <td class="cell-value font-bold" id="pv-ack-eng-name">-</td>
+                                                <td class="cell-sign-space"></td>
+                                                <td class="cell-value" id="pv-ack-eng-date">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cell-role-label">Customer</td>
+                                                <td class="cell-value font-bold" id="pv-ack-cust-name">-</td>
+                                                <td class="cell-sign-space"></td>
+                                                <td class="cell-value" id="pv-ack-cust-date">-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div> <!-- END OF PAGE 2 -->
+
+                        </div> <!-- END OF PRINT DOCUMENT -->
+
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Application Logic Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>

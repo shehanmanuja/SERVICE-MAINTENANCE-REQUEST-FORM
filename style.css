@@ -1,0 +1,1374 @@
+/* ==========================================================================
+   SERVICE & MAINTENANCE REQUEST FORM - COMPLETE STYLESHEET
+   1. Design System & CSS Variables (Solar Green/Teal/Blue Aesthetic)
+   2. Web UI Layout, Cards, Inputs, Buttons & Custom Controls
+   3. Live Print Preview Stage & Zoom Engine
+   4. Exact A4 Document Layout & Typography (Page 1 & Page 2)
+   5. @media print Specifications (Strict 2-Page Zero Overflow)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DESIGN SYSTEM & CSS VARIABLES
+   -------------------------------------------------------------------------- */
+:root {
+    /* Brand Color Theme: Deep Forest Green + Deep Navy Blue Gradient (Exact Reference Match) */
+    --primary-green: #005a49;
+    --primary-teal: #006e5a;
+    --primary-blue: #102a45;
+    --primary-mint: #34d399;
+    --primary-gradient: linear-gradient(90deg, #005c4b 0%, #006854 45%, #102a45 100%);
+    --gradient-subtle: linear-gradient(135deg, rgba(0, 92, 75, 0.08) 0%, rgba(16, 42, 69, 0.08) 100%);
+    --accent-glow: 0 8px 24px -4px rgba(0, 92, 75, 0.28);
+
+    /* Neutral & Backgrounds */
+    --bg-page: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-card-header: #f8fafc;
+    --bg-input: #f8fafc;
+    --border-color: #e2e8f0;
+    --border-focus: #006e5a;
+
+    /* Text Colors */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-inverse: #ffffff;
+
+    /* UI State Colors */
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --warning: #f59e0b;
+    --success: #10b981;
+
+    /* Typography */
+    --font-ui: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-print: Arial, Helvetica, sans-serif;
+
+    /* Elevation & Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --shadow-preview: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+    /* Sizing & Transitions */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-ui);
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+
+/* --------------------------------------------------------------------------
+   2. WEB UI LAYOUT & HEADER
+   -------------------------------------------------------------------------- */
+.web-ui-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* App Header */
+.app-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.brand-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-logo {
+    height: 46px;
+    max-height: 50px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.main-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #000000;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Header Action Buttons */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.15rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: var(--transition);
+    font-family: var(--font-ui);
+    white-space: nowrap;
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(0, 90, 73, 0.32);
+    border: none;
+}
+
+.btn-primary .btn-icon {
+    color: var(--primary-mint);
+    filter: drop-shadow(0 0 2px rgba(52, 211, 153, 0.4));
+}
+
+.btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(0, 90, 73, 0.48);
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+}
+
+.btn-secondary {
+    background: #ffffff;
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: var(--primary-green);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary-green);
+    border-color: rgba(0, 90, 73, 0.35);
+}
+
+.btn-outline:hover {
+    background: rgba(0, 90, 73, 0.08);
+    border-color: var(--primary-green);
+}
+
+.btn-danger {
+    background: #ffffff;
+    color: var(--danger);
+    border-color: #fecaca;
+}
+
+.btn-danger:hover {
+    background: var(--danger-bg);
+    border-color: var(--danger);
+}
+
+.btn-large {
+    padding: 0.85rem 1.75rem;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.btn-sm {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8125rem;
+}
+
+/* --------------------------------------------------------------------------
+   WORKSPACE 2-COLUMN SPLIT
+   -------------------------------------------------------------------------- */
+.app-workspace {
+    display: grid;
+    grid-template-columns: minmax(500px, 1.15fr) minmax(480px, 1fr);
+    gap: 1.5rem;
+    padding: 1.5rem 2rem 3rem 2rem;
+    max-width: 1920px;
+    margin: 0 auto;
+    width: 100%;
+    align-items: start;
+}
+
+/* Left Form Container */
+.form-panel-container {
+    background: transparent;
+}
+
+.panel-header-sticky {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding: 0.5rem 0;
+}
+
+.panel-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.panel-tag h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.pulse-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--primary-green);
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 90, 73, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(0, 90, 73, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 90, 73, 0);
+    }
+}
+
+.auto-sync-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-teal);
+    background: rgba(14, 165, 233, 0.1);
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+}
+
+/* Form Cards */
+.form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.form-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow-md);
+}
+
+.card-header {
+    background: var(--bg-card-header);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.card-step-num {
+    background: var(--primary-gradient);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+}
+
+.card-header-text h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.card-header-text p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Form Controls & Layout Grids */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.form-label.required::after {
+    content: " *";
+    color: var(--danger);
+}
+
+.sub-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+
+.form-input, .form-textarea, .form-select {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.875rem;
+    font-family: var(--font-ui);
+    color: var(--text-primary);
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 92, 75, 0.18);
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+    color: #94a3b8;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.short-textarea {
+    min-height: 60px;
+}
+
+/* Nested Group Boxes */
+.nested-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    padding: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.nested-box-title {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    margin-bottom: 0.6rem;
+}
+
+.inner-grid {
+    gap: 0.75rem;
+}
+
+/* Custom Checkbox Web UI Component */
+.checkbox-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.inline-wrap {
+    flex-wrap: wrap;
+}
+
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.grid-3-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grid-4-col {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+}
+
+.custom-checkbox-ui {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    user-select: none;
+    padding: 0.35rem 0.6rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.custom-checkbox-ui:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.custom-checkbox-ui input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.custom-checkbox-ui .checkmark {
+    position: relative;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-color: #ffffff;
+    border: 1.5px solid #94a3b8;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.custom-checkbox-ui:hover input ~ .checkmark {
+    border-color: var(--primary-teal);
+}
+
+.custom-checkbox-ui input:checked ~ .checkmark {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+}
+
+.custom-checkbox-ui .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 4.5px;
+    top: 1.5px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.custom-checkbox-ui input:checked ~ .checkmark::after {
+    display: block;
+}
+
+.custom-checkbox-ui input:checked ~ span {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Priority Badges in Web UI */
+.badge-tag {
+    font-weight: 600;
+}
+
+.badge-tag.emergency { color: #dc2626; }
+.badge-tag.high { color: #ea580c; }
+.badge-tag.normal { color: #16a34a; }
+.badge-tag.low { color: #2563eb; }
+
+/* Inline Other Text Input */
+.inline-other-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.inline-other-wrap.full-span {
+    grid-column: 1 / -1;
+}
+
+.inline-other-input {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8125rem;
+}
+
+/* Photo Evidence Rows in Web UI */
+.photo-evidence-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.photo-check-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.photo-check-row:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.photo-check-row input {
+    position: absolute;
+    opacity: 0;
+}
+
+.photo-check-row .checkmark {
+    position: relative;
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    background-color: #ffffff;
+    border: 1.5px solid #94a3b8;
+    border-radius: 4px;
+    margin-right: 0.75rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.photo-check-row input:checked ~ .checkmark {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+}
+
+.photo-check-row .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.photo-check-row input:checked ~ .checkmark::after {
+    display: block;
+}
+
+.photo-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.photo-title {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.photo-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Acknowledgement Rows in Web UI */
+.ack-grid-row {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.85rem;
+    margin-bottom: 0.75rem;
+}
+
+.ack-grid-row:last-child {
+    margin-bottom: 0;
+}
+
+.ack-role-title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Page Divider Pill */
+.page-divider-badge {
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+    gap: 1rem;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: #cbd5e1;
+}
+
+.divider-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: #e2e8f0;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+}
+
+.form-bottom-bar {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   3. LIVE PRINT PREVIEW PANEL & ZOOM ENGINE
+   -------------------------------------------------------------------------- */
+.preview-panel-container {
+    position: sticky;
+    top: 5.5rem;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 7rem);
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.preview-toolbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.65rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+}
+
+.preview-toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.preview-label-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.preview-eye-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--primary-teal);
+}
+
+.page-count-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: #f1f5f9;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.preview-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+}
+
+.tool-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.tool-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.tool-btn:hover {
+    background: #e2e8f0;
+    color: var(--text-primary);
+}
+
+.fit-btn {
+    width: auto;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-ui);
+}
+
+.zoom-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    min-width: 44px;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+/* Scrollable Viewport Wrapper */
+.preview-scroll-viewport {
+    flex: 1;
+    overflow: auto;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: #cbd5e1;
+}
+
+.preview-zoom-stage {
+    transform-origin: top center;
+    transition: transform 0.15s ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* --------------------------------------------------------------------------
+   4. EXACT A4 PRINTABLE DOCUMENT SPECIFICATION (PAGE 1 & PAGE 2)
+   -------------------------------------------------------------------------- */
+.print-document {
+    display: block;
+    width: 210mm;
+    margin: 0 auto;
+}
+
+.print-page {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    padding: 8mm 11mm 8mm 11mm;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    box-shadow: var(--shadow-preview);
+    position: relative;
+    font-family: var(--font-print);
+    color: #000000;
+    font-size: 8.5pt;
+    line-height: 1.3;
+    overflow: hidden;
+}
+
+/* ---- PREMIUM PRINT HEADER ---- */
+.print-doc-header {
+    margin-bottom: 3mm;
+    border-bottom: 2px solid #004d3d;
+    padding-bottom: 2.5mm;
+}
+
+.print-header-top {
+    display: flex;
+    align-items: center;
+    gap: 3mm;
+}
+
+.print-header-logo-wrap {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.print-logo {
+    height: 14mm;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.print-header-title-block {
+    flex: 1;
+}
+
+.print-main-title {
+    font-size: 12pt;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+    color: #004d3d;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+}
+
+.print-header-sub {
+    font-size: 7.5pt;
+    color: #555555;
+    margin-top: 0.5mm;
+    font-style: italic;
+}
+
+.print-header-meta {
+    flex-shrink: 0;
+    text-align: right;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+    padding: 1.5mm 2.5mm;
+    background: #f8f8f8;
+    min-width: 38mm;
+}
+
+.print-meta-row {
+    font-size: 7pt;
+    color: #333333;
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+.print-meta-label {
+    font-weight: bold;
+    color: #004d3d;
+    margin-right: 1mm;
+}
+
+.print-meta-val {
+    color: #000000;
+}
+
+/* ---- PAGE 2 CONTINUATION HEADER ---- */
+.print-page2-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3mm;
+    padding-bottom: 2mm;
+    border-bottom: 2px solid #004d3d;
+}
+
+.print-page2-title {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #004d3d;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.print-page2-cont {
+    font-weight: normal;
+    font-size: 8pt;
+    color: #666666;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.print-page2-meta {
+    font-size: 7.5pt;
+    color: #555555;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5mm;
+}
+
+/* Print Section Headers */
+.print-section {
+    margin-bottom: 3mm;
+}
+
+.print-section:last-child {
+    margin-bottom: 0;
+}
+
+.print-section-header {
+    font-size: 8.5pt;
+    font-weight: bold;
+    color: #ffffff;
+    background: #004d3d;
+    margin-bottom: 0;
+    padding: 1mm 2.5mm;
+    letter-spacing: 0.02em;
+}
+
+/* Precise Document Tables */
+.print-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 8.25pt;
+    color: #000000;
+    border: 1px solid #333333;
+}
+
+.print-table th,
+.print-table td {
+    border: 1px solid #333333;
+    padding: 1.6mm 2.2mm;
+    vertical-align: middle;
+    word-wrap: break-word;
+    box-sizing: border-box;
+}
+
+.print-table th {
+    background-color: #f3f4f6;
+    font-weight: bold;
+    text-align: center;
+    font-size: 8.25pt;
+    padding: 2mm 2.2mm;
+}
+
+.cell-label {
+    font-weight: bold;
+    color: #111111;
+    background-color: #fafafa;
+    white-space: normal;
+}
+
+.cell-value {
+    color: #000000;
+    font-weight: normal;
+}
+
+.cell-role-label {
+    font-weight: bold;
+    background-color: #fafafa;
+}
+
+.align-top {
+    vertical-align: top !important;
+}
+
+/* Dynamic Textarea Cell Sizing for Print Exact Fit */
+.cell-textarea-p1 {
+    height: 14mm;
+    vertical-align: top;
+    white-space: pre-wrap;
+    font-size: 8pt;
+}
+
+.cell-textarea-p2 {
+    height: 22mm;
+    vertical-align: top;
+    white-space: pre-wrap;
+    font-size: 8pt;
+}
+
+.cell-textarea-p2-parts {
+    height: 16mm;
+    vertical-align: top;
+    white-space: pre-wrap;
+    font-size: 8pt;
+}
+
+.cell-remarks-box {
+    height: 16mm;
+    vertical-align: top;
+    white-space: pre-wrap;
+    font-size: 8pt;
+}
+
+.cell-sign-space {
+    height: 12mm;
+}
+
+/* Photo Checklist Print Formatting */
+.cell-photo-title {
+    vertical-align: middle;
+    white-space: nowrap;
+    font-weight: normal;
+}
+
+.cell-photo-desc {
+    vertical-align: middle;
+    color: #333333;
+    font-size: 8pt;
+}
+
+/* Print Checkbox Inline Elements */
+.p-cb {
+    display: inline-block;
+    font-family: "Segoe UI Symbol", "DejaVu Sans", Arial, sans-serif;
+    font-size: 9pt;
+    font-weight: normal;
+    margin-right: 2px;
+    line-height: 1;
+}
+
+.p-cb.checked {
+    font-weight: bold;
+    color: #000000;
+}
+
+.print-cb-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 3.5mm;
+}
+
+.print-cb-row-split {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 3.5mm;
+}
+
+.remaining-war-text {
+    margin-left: auto;
+    font-weight: bold;
+}
+
+.print-cb-grid-status {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2mm 2.5mm;
+}
+
+.print-cb-grid-affected {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2mm 2.5mm;
+}
+
+.p-cb-item {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.p-sub-label {
+    font-weight: bold;
+    margin-right: 2px;
+}
+
+.p-val-span {
+    display: inline-block;
+    min-width: 18mm;
+    font-weight: normal;
+}
+
+.p-val-inline {
+    display: inline-block;
+    font-weight: normal;
+}
+
+.underline-val {
+    border-bottom: 1px dotted #333333;
+    min-width: 25mm;
+    padding: 0 2mm;
+}
+
+.unit-text {
+    font-size: 7.5pt;
+    color: #444444;
+    margin-left: 1px;
+}
+
+/* Font utilities */
+.font-bold { font-weight: bold !important; }
+.font-medium { font-weight: 600; }
+.font-normal { font-weight: normal; }
+.color-danger-code { color: #cc0000; }
+.cell-center { text-align: center; }
+.ml-2 { margin-left: 2mm; }
+.ml-4 { margin-left: 4mm; }
+.ml-6 { margin-left: 6mm; }
+.mb-2 { margin-bottom: 0.5rem; }
+
+/* Photo evidence summary list cell */
+.cell-photo-evidence-list {
+    vertical-align: top;
+    padding: 2mm 2.5mm;
+    font-size: 8pt;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+/* --------------------------------------------------------------------------
+   5. TOAST NOTIFICATIONS
+   -------------------------------------------------------------------------- */
+.toast-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.toast {
+    background: #0f172a;
+    color: #ffffff;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: auto;
+    animation: slideUp 0.25s ease-out forwards;
+}
+
+.toast-success {
+    border-left: 4px solid var(--primary-green);
+}
+
+.toast-info {
+    border-left: 4px solid var(--primary-teal);
+}
+
+.toast-danger {
+    border-left: 4px solid var(--danger);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   6. RESPONSIVE BREAKPOINTS (WEB UI)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 1200px) {
+    .app-workspace {
+        grid-template-columns: 1fr;
+    }
+    .preview-panel-container {
+        position: relative;
+        top: 0;
+        height: 750px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    .header-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .app-workspace {
+        padding: 1rem;
+    }
+    .form-grid-2 {
+        grid-template-columns: 1fr;
+    }
+    .grid-3-col, .grid-4-col {
+        grid-template-columns: 1fr 1fr;
+    }
+    .form-bottom-bar {
+        flex-direction: column;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   7. CRITICAL PRINT MEDIA SPECIFICATIONS (@media print)
+   - Guarantees Exactly 2 A4 Portrait Pages
+   - Zero Third Page Overflow
+   - Hides all Web UI, Navigation, Buttons, Borders, Shadows
+   -------------------------------------------------------------------------- */
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+@media print {
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        width: 210mm !important;
+        height: auto !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Hide Web UI Components */
+    .app-header,
+    .form-panel-container,
+    .preview-toolbar,
+    .toast-container,
+    .panel-header-sticky,
+    .page-divider-badge {
+        display: none !important;
+    }
+
+    /* Reset Workspace and Preview Containers */
+    .web-ui-container,
+    .app-workspace,
+    .preview-panel-container,
+    .preview-scroll-viewport,
+    .preview-zoom-stage {
+        display: block !important;
+        position: static !important;
+        width: 210mm !important;
+        height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        box-shadow: none !important;
+        transform: none !important;
+        overflow: visible !important;
+    }
+
+    .print-document {
+        display: block !important;
+        width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Exact Physical A4 Pages */
+    .print-page {
+        display: block !important;
+        width: 210mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        padding: 8mm 11mm 8mm 11mm !important;
+        box-sizing: border-box !important;
+        background-color: #ffffff !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* Ensure section headers & borders print with color */
+    .print-section-header {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        background: #004d3d !important;
+        color: #ffffff !important;
+    }
+
+    .print-header-top {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .print-page-1 {
+        page-break-after: always !important;
+        break-after: page !important;
+    }
+
+    .print-page-2 {
+        page-break-before: always !important;
+        break-before: page !important;
+    }
+
+    /* Table & Row Integrity */
+    .print-table {
+        border: 1px solid #333333 !important;
+        page-break-inside: avoid !important;
+    }
+
+    .print-table th,
+    .print-table td {
+        border: 1px solid #333333 !important;
+        page-break-inside: avoid !important;
+    }
+
+    tr {
+        page-break-inside: avoid !important;
+    }
+}
